@@ -1,10 +1,7 @@
 import arcade
 from player import Player
-
-# Constants
-SCREEN_WIDTH = 1000
-SCREEN_HEIGHT = 650
-SCREEN_TITLE = "Platformer"
+from invaders_constants import *
+from invader_wall import Wall
 
 class Invaders(arcade.Window):
     """
@@ -20,10 +17,11 @@ class Invaders(arcade.Window):
         # go into a list.
         self.wall_list = None
         self.player_list = None
+        self.wall = Wall(1)
         # Separate variable that holds the player sprite
         self.player_sprite = None
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
-        self.physics_engine = None
+        # self.physics_engine = None
         self.keys_pressed_status = {}
 
     def setup(self):
@@ -31,9 +29,11 @@ class Invaders(arcade.Window):
         # Create the Sprite lists
         self.player_list = arcade.SpriteList()
         self.wall_list = arcade.SpriteList(use_spatial_hash=True)
+        self.laser_list = arcade.SpriteList()
+
 
         # Set up the player, specifically placing it at these coordinates.
-        self.player_sprite = Player(0, 0)
+        self.player_sprite = Player(0, 0, self.laser_list)
         self.player_list.append(self.player_sprite)
 
         # # Create the ground
@@ -70,14 +70,16 @@ class Invaders(arcade.Window):
         #     wall.position = coordinate
         #     self.wall_list.append(wall)
         # Create the 'physics engine'
-        self.physics_engine = arcade.PhysicsEngineSimple(
-            self.player_sprite, self.wall_list)
+        # self.physics_engine = arcade.PhysicsEngineSimple(
+        #     self.player_sprite, self.wall_list)
 
     def on_update(self, delta_time):
         """Movement and game logic"""
-
         # Move the player with the physics engine
-        self.physics_engine.update()
+        # self.physics_engine.update()
+        self.player_list.update()
+        self.laser_list.update()
+
 
     def on_draw(self):
         """Render the screen."""
@@ -85,7 +87,10 @@ class Invaders(arcade.Window):
         self.clear()
         # Code to draw the screen goes here
         self.player_list.draw()
-        print(self.player_sprite.change_x)
+        self.laser_list.draw()
+        self.wall.block_list.draw()
+
+
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
