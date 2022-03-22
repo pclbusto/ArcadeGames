@@ -17,7 +17,7 @@ class Invaders(arcade.Window):
         # go into a list.
         self.wall_list = None
         self.player_list = None
-        self.wall = Wall(1)
+        self.wall = Wall(50, 5)
         # Separate variable that holds the player sprite
         self.player_sprite = None
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
